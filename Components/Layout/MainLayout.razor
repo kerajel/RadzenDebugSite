@@ -1,0 +1,107 @@
+@using Microsoft.EntityFrameworkCore
+@using RadzenDebugSite.Context
+@using RadzenDebugSite.Models
+@using System.Linq.Dynamic.Core
+
+@inherits LayoutComponentBase
+@inject CookieThemeService CookieThemeService
+@inject AppDbContext DbContext
+
+<RadzenComponents />
+
+<RadzenLayout style="grid-template-areas: 'rz-sidebar rz-header' 'rz-sidebar rz-body';">
+    <RadzenBody Expanded="@sidebarExpanded">
+        <RadzenRow class="rz-mx-auto rz-px-4 rz-pt-2 rz-pt-md-4 rz-pt-lg-6 rz-pt-xl-12 rz-pb-2 rz-pb-lg-12" Style="max-width: 1440px;">
+            <RadzenColumn Size="12">
+                <RadzenDataGrid AllowAlternatingRows="false"
+                AllowColumnResize="true"
+                AllowFiltering="true"
+                AllowPaging="true"
+                AllowSorting="true"
+                ColumnWidth="150px"
+                Count="@totalCount"
+                Data="@entries"
+                KeyProperty="@nameof(Series.Id)"
+                LoadData="LoadData"
+                IsLoading="@isLoading"
+                LogicalFilterOperator="LogicalFilterOperator.And"
+                PagerHorizontalAlign="HorizontalAlign.Left"
+                PageSize="10"
+                SelectionMode="DataGridSelectionMode.Multiple"
+                ShowPagingSummary="true"
+                TItem="Series"
+                FilterPopupRenderMode="PopupRenderMode.OnDemand"
+                FilterMode="FilterMode.Advanced"
+                ExpandMode="DataGridExpandMode.Multiple"
+                PagingSummaryFormat="@("Displaying page {0:N0} of {1:N0} <b>(total {2:N0} records)</b>")">
+
+                    <Columns>
+                        <RadzenDataGridColumn Property="@nameof(Series.Id)"
+                        Title="Id"
+                        TextAlign="TextAlign.Center" />
+
+                        <RadzenDataGridColumn Property="@nameof(Series.CreatedAt)"
+                        TextAlign="TextAlign.Left"
+                        FormatString="{0:yyyy-MM-dd}"
+                        Title="Created At" />
+
+                        <RadzenDataGridColumn Property="@nameof(Series.SgasComment)"
+                        TextAlign="TextAlign.Left"
+                        Title="Sgas Comment" />
+
+                        <RadzenDataGridColumn Property="@nameof(Series.WorkingPaperLink)"
+                        Title="Working Paper Link"
+                        TextAlign="TextAlign.Left">
+                        </RadzenDataGridColumn>
+
+                        <RadzenDataGridColumn Property="@nameof(Series.IsDu)"
+                        TextAlign="TextAlign.Left"
+                        Title="Is Du">
+                        </RadzenDataGridColumn>
+
+                        <RadzenDataGridColumn Property="@nameof(Series.IsNu)"
+                        TextAlign="TextAlign.Left"
+                        Title="Is Nu">
+                        </RadzenDataGridColumn>
+
+                        <RadzenDataGridColumn Property="@nameof(Series.AnalysisCompleteDate)"
+                        TextAlign="TextAlign.Left"
+                        FormatString="{0:yyyy-MM-dd}"
+                        Title="Analysis Complete Date">
+                        </RadzenDataGridColumn>
+
+                    </Columns>
+                </RadzenDataGrid>
+
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenBody>
+</RadzenLayout>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await LoadData(new());
+        await base.OnAfterRenderAsync(firstRender);
+        StateHasChanged();
+    }
+
+    protected List<Series> entries = [];
+    protected int totalCount;
+    protected bool isLoading;
+
+    public async Task LoadData(LoadDataArgs loadDataArgs)
+    {
+        isLoading = true;
+
+        var query = DbContext.Series.AsQueryable();
+
+        query = string.IsNullOrEmpty(loadDataArgs.Filter) ? query : query.Where(loadDataArgs.Filter);
+        query = string.IsNullOrEmpty(loadDataArgs.OrderBy) ? query : query.OrderBy(loadDataArgs.OrderBy);
+
+        entries = await query.Take(25).ToListAsync();
+        totalCount = await query.CountAsync();
+
+        isLoading = false;
+    }
+}
