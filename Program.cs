@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Radzen;
+using RadzenDebugSite.Components;
 using RadzenDebugSite.Context;
 
 var builder = WebApplication.CreateBuilder(args);
