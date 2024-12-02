@@ -94,13 +94,13 @@
     {
         isLoading = true;
 
-        var query = DbContext.Series.AsQueryable();
+        var query = Enumerable.Range(0, 50).Select(x => new Series { Id = x + 10000 }).AsQueryable();
 
         query = string.IsNullOrEmpty(loadDataArgs.Filter) ? query : query.Where(loadDataArgs.Filter);
         query = string.IsNullOrEmpty(loadDataArgs.OrderBy) ? query : query.OrderBy(loadDataArgs.OrderBy);
 
-        entries = await query.Take(25).ToListAsync();
-        totalCount = await query.CountAsync();
+        entries = await Task.FromResult(query.Take(25).ToList());
+        totalCount = await Task.FromResult(query.Count());
 
         isLoading = false;
     }
