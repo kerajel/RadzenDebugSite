@@ -13,65 +13,19 @@
     <RadzenBody Expanded="@sidebarExpanded">
         <RadzenRow class="rz-mx-auto rz-px-4 rz-pt-2 rz-pt-md-4 rz-pt-lg-6 rz-pt-xl-12 rz-pb-2 rz-pb-lg-12" Style="max-width: 1440px;">
             <RadzenColumn Size="12">
-                <RadzenDataGrid AllowAlternatingRows="false"
-                AllowColumnResize="true"
-                AllowFiltering="true"
-                AllowPaging="true"
-                AllowSorting="true"
-                ColumnWidth="150px"
-                Count="@totalCount"
-                Data="@entries"
-                KeyProperty="@nameof(Series.Id)"
-                LoadData="LoadData"
-                IsLoading="@isLoading"
-                LogicalFilterOperator="LogicalFilterOperator.And"
-                PagerHorizontalAlign="HorizontalAlign.Left"
-                PageSize="10"
-                SelectionMode="DataGridSelectionMode.Multiple"
-                ShowPagingSummary="true"
-                TItem="Series"
-                FilterPopupRenderMode="PopupRenderMode.OnDemand"
-                FilterMode="FilterMode.Advanced"
-                ExpandMode="DataGridExpandMode.Multiple"
-                PagingSummaryFormat="@("Displaying page {0:N0} of {1:N0} <b>(total {2:N0} records)</b>")">
 
-                    <Columns>
-                        <RadzenDataGridColumn Property="@nameof(Series.Id)"
-                        Title="Id"
-                        TextAlign="TextAlign.Center" />
+                <RadzenTabs RenderMode="@TabRenderMode.Client">
+                    <Tabs>
 
-                        <RadzenDataGridColumn Property="@nameof(Series.CreatedAt)"
-                        TextAlign="TextAlign.Left"
-                        FormatString="{0:yyyy-MM-dd}"
-                        Title="Created At" />
+                        <RadzenTabsItem Text="Particles_1" Style="margin-right: 5px;">
+                            <ProjectParticleUraniumBinCountsChart />
+                        </RadzenTabsItem>
 
-                        <RadzenDataGridColumn Property="@nameof(Series.SgasComment)"
-                        TextAlign="TextAlign.Left"
-                        Title="Sgas Comment" />
-
-                        <RadzenDataGridColumn Property="@nameof(Series.WorkingPaperLink)"
-                        Title="Working Paper Link"
-                        TextAlign="TextAlign.Left">
-                        </RadzenDataGridColumn>
-
-                        <RadzenDataGridColumn Property="@nameof(Series.IsDu)"
-                        TextAlign="TextAlign.Left"
-                        Title="Is Du">
-                        </RadzenDataGridColumn>
-
-                        <RadzenDataGridColumn Property="@nameof(Series.IsNu)"
-                        TextAlign="TextAlign.Left"
-                        Title="Is Nu">
-                        </RadzenDataGridColumn>
-
-                        <RadzenDataGridColumn Property="@nameof(Series.AnalysisCompleteDate)"
-                        TextAlign="TextAlign.Left"
-                        FormatString="{0:yyyy-MM-dd}"
-                        Title="Analysis Complete Date">
-                        </RadzenDataGridColumn>
-
-                    </Columns>
-                </RadzenDataGrid>
+                        <RadzenTabsItem Text="Particles_2" Style="margin-right: 5px;">
+                            <ProjectParticleUraniumBinCountsChart />
+                        </RadzenTabsItem>
+                    </Tabs>
+                </RadzenTabs>
 
             </RadzenColumn>
         </RadzenRow>
